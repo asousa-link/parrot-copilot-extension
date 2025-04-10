@@ -20,6 +20,15 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	const participant = vscode.chat.createChatParticipant(
+    "asousa.copilot.parrot",
+    (request, context, response, token) => {
+      response.markdown(request.prompt);
+    }
+  );
+
+  context.subscriptions.push(participant);
 }
 
 // This method is called when your extension is deactivated

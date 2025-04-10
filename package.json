@@ -10,12 +10,26 @@
     "Other"
   ],
   "activationEvents": [],
+  "extensionDependencies": [
+    "github.copilot",
+    "github.copilot-chat"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "asousa-copilot-chat-parrot.helloWorld",
         "title": "Hello World"
+      }
+    ],
+    "chatParticipants": [
+      {
+        "id": "asousa.copilot.parrot",
+        "name": "parrot",
+        "fullName": "Parrot",
+        "description": "Who knows that this does. It just repeats things.",
+        "isSticky": true,
+        "commands": []
       }
     ]
   },
