@@ -16,12 +16,7 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "asousa-copilot-chat-parrot.helloWorld",
-        "title": "Hello World"
-      }
-    ],
+    "commands": [],
     "chatParticipants": [
       {
         "id": "asousa.copilot.parrot",
@@ -29,7 +24,20 @@
         "fullName": "Parrot",
         "description": "Who knows that this does. It just repeats things.",
         "isSticky": true,
-        "commands": []
+        "commands": [
+          {
+            "name": "listmodels",
+            "description": "List all available models"
+          },
+          {
+            "name": "likeapirate",
+            "description": "Parrot like a pirate"
+          },
+          {
+            "name": "likeyoda",
+            "description": "Parrot like Yoda"
+          }
+        ]
       }
     ]
   },

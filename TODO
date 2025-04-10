@@ -1,0 +1,1 @@
+- Add to commands in package.json:             "when": "config.asousa.copilot.parrot.like.Enabled",
