@@ -1,4 +1,7 @@
 import * as vscode from "vscode";
+import { addReferencesToResponse } from "./references";
+import { listAvailableCopilotModels } from "./helpers/listCopilotModels";
+import { getUserPrompt } from "./helpers/getUserPrompt";
 
 export async function handleParrotChatHandler(
   request: vscode.ChatRequest,
@@ -7,14 +10,21 @@ export async function handleParrotChatHandler(
   token: vscode.CancellationToken
 ): Promise<void | vscode.ChatResult | null | undefined> {
   const command = request.command;
+
   response.progress("Looking at something to parrot...");
 
+  const { userPrompt, references } = await getUserPrompt(request);
+
+  addReferencesToResponse(request, response, references);
+
   switch (command) {
+    case "listmodels":
+      return await listAvailableCopilotModels(response);
     case "likeapirate":
     case "likeyoda":
       const messages = [
         generateSystemPrompt(command),
-        vscode.LanguageModelChatMessage.User(request.prompt),
+        vscode.LanguageModelChatMessage.User(userPrompt),
       ];
 
       const [chatModel] = await vscode.lm.selectChatModels({
@@ -30,31 +40,8 @@ export async function handleParrotChatHandler(
 
       break;
     default:
-      response.markdown(request.prompt);
+      response.markdown(userPrompt);
       break;
-  }
-}
-
-function addReferencesToResponse(
-  request: vscode.ChatRequest,
-  response: vscode.ChatResponseStream
-) {
-  const command = request.command;
-
-  // Nonsense reference just for demo purposes. It's not really a reference to the user's input
-  response.reference(vscode.Uri.parse("https://www.google.com"));
-
-  // Like yoda add yoda reference if talking.  Yes, hmmm.
-  if (command === "likeyoda") {
-    response.reference(vscode.Uri.parse("https://en.wikipedia.org/wiki/Yoda"));
-  }
-  // add a reference if blabberin' on like a pirate
-  if (command === "likeapirate") {
-    response.reference(
-      vscode.Uri.parse(
-        "https://en.wikipedia.org/wiki/International_Talk_Like_a_Pirate_Day"
-      )
-    );
   }
 }
 
