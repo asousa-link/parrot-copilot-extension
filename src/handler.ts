@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { addReferencesToResponse } from "./references";
 import { listAvailableCopilotModels } from "./helpers/listCopilotModels";
 import { getUserPrompt } from "./helpers/getUserPrompt";
+import { getModelFamily, getChatModelByName } from "./helpers/getChatModel";
 
 export async function handleParrotChatHandler(
   request: vscode.ChatRequest,
@@ -27,10 +28,7 @@ export async function handleParrotChatHandler(
         vscode.LanguageModelChatMessage.User(userPrompt),
       ];
 
-      const [chatModel] = await vscode.lm.selectChatModels({
-        vendor: "copilot",
-        family: "gpt-4o-mini",
-      });
+      const chatModel = await getChatModelByName(getModelFamily(request));
 
       const ChatResponse = await chatModel.sendRequest(messages, {}, token);
 
@@ -59,3 +57,4 @@ function generateSystemPrompt(
     `Repeat what I will say below, but make it sound like a coding ${soundLike}parrot. Return the text in plaintext`
   );
 }
+
