@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { handleParrotChatHandler } from "./handler";
+import { generateFollowups } from "./followup";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -36,6 +37,10 @@ export function activate(context: vscode.ExtensionContext) {
     "images",
     "parrot.png"
   );
+
+  participant.followupProvider = {
+    provideFollowups: generateFollowups,
+  };
 
   context.subscriptions.push(participant);
 }
