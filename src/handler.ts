@@ -37,9 +37,46 @@ export async function handleParrotChatHandler(
       }
 
       break;
+    case "countTabs":
+      // Parse tab group from prompt if needed
+      const tabGroupMatch = request.prompt.match(/tabGroup[:\s]+(\d+)/i);
+      const tabGroup = tabGroupMatch ? parseInt(tabGroupMatch[1]) : undefined;
+
+      await handleToolCall(
+        response,
+        "asousa-parrot_tabCount",
+        { tabGroup },
+        token,
+        request.toolInvocationToken // Pass the token from the request
+      );
+      break;
     default:
       response.markdown(userPrompt);
       break;
+  }
+}
+
+async function handleToolCall(
+  response: vscode.ChatResponseStream,
+  toolName: string,
+  params: any,
+  token: vscode.CancellationToken,
+  toolInvocationToken: vscode.ChatParticipantToolToken
+) {
+  try {
+    const toolResult = await vscode.lm.invokeTool(
+      toolName,
+      { input: params, toolInvocationToken },
+      token
+    );
+
+    for (const part of toolResult.content) {
+      if (part instanceof vscode.LanguageModelTextPart) {
+        response.markdown(part.value);
+      }
+    }
+  } catch (error) {
+    response.markdown(`Failed to invoke tool: ${error}`);
   }
 }
 
@@ -57,4 +94,3 @@ function generateSystemPrompt(
     `Repeat what I will say below, but make it sound like a coding ${soundLike}parrot. Return the text in plaintext`
   );
 }
-

@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { handleParrotChatHandler } from "./handler";
 import { generateFollowups } from "./followup";
 import { handleFeedback } from './helpers/feedbackHandler';
+import { registerChatTools } from "./tools";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -45,6 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   participant.onDidReceiveFeedback(handleFeedback);
   context.subscriptions.push(participant);
+
+  registerChatTools(context);
 }
 
 // This method is called when your extension is deactivated

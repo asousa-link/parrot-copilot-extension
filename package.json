@@ -36,8 +36,36 @@
           {
             "name": "likeyoda",
             "description": "Parrot like Yoda"
+          },
+          {
+            "name": "countTabs",
+            "description": "Count the number of tabs open in the editor"
           }
         ]
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "asousa-parrot_tabCount",
+        "tags": [
+          "editors",
+          "asousa-parrot"
+        ],
+        "toolReferenceName": "countTabs",
+        "displayName": "Tab Count",
+        "modelDescription": "The number of active tabs in a tab group",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(files)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tabGroup": {
+              "type": "number",
+              "description": "The index of the tab group to check. This is optional- if not specified, the active tab group will be checked.",
+              "default": 0
+            }
+          }
+        }
       }
     ]
   },
@@ -56,16 +84,19 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "eslint": "^9.23.0",
-    "esbuild": "^0.25.1",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.1",
+    "eslint": "^9.23.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@vscode/prompt-tsx": "^0.4.0-alpha.4"
   }
 }
